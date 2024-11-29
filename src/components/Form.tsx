@@ -1,49 +1,144 @@
+import React, { useState, useContext } from "react";
+import EmployeesContext from "../contexts/employee.context";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+interface FormProps {
+  states: { name: string; abbreviation: string }[];
+  departments: string[];
+}
+
+const Form: React.FC<FormProps> = (props) => {
+  const employeeContext = useContext(EmployeesContext);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthDate, setBirthDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState<number | null>(null);
+  const [department, setDepartment] = useState("");
 
 
-export function Form () {
 
+  const handleSubmit = () => {
+    if (employeeContext) {
+      const employee = {
+        firstName,
+        lastName,
+        startDate: startDate.toLocaleDateString("en-US"),
+        department,
+        birthDate: birthDate.toLocaleDateString("en-US"),
+        street,
+        city,
+        state,
+        zip: zip !== null ? zip : 0,
+      };
+      employeeContext.addEmployee(employee);
+      console.log(employeeContext);
+    } else {
+      console.error("EmployeeContext is null");
+    }
+  };
+ 
     return(
         <>
         <form action="#" id="create-employee">
                 <label htmlFor="first-name">First Name</label>
-                <input type="text" id="first-name" />
+                <input type="text" id="first-name" 
+                onChange={(e) => setFirstName(e.target.value)}/>
 
                 <label htmlFor="last-name">Last Name</label>
-                <input type="text" id="last-name" />
+                <input type="text" id="last-name" 
+                onChange={(e) => setLastName(e.target.value)}/>
 
                 <label htmlFor="date-of-birth">Date of Birth</label>
-                <input id="date-of-birth" type="text" />
+                <DatePicker
+                    id="date-of-birth"
+                    selected={birthDate}
+                    onChange={(date) => date?setBirthDate(date):null}
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    ariaLabelClose="Close"
+                />
+
 
                 <label htmlFor="start-date">Start Date</label>
-                <input id="start-date" type="text" />
+                <DatePicker
+                    id="start-date"
+                    selected={startDate}
+                    onChange={(date) => date?setStartDate(date):null}
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    ariaLabelClose="Close"
+                />
 
                 <fieldset className="address">
                     <legend>Address</legend>
 
                     <label htmlFor="street">Street</label>
-                    <input id="street" type="text" />
+                    <input id="street" type="text" 
+                    onChange={(e) => setStreet(e.target.value)}/>
 
                     <label htmlFor="city">City</label>
-                    <input id="city" type="text" />
+                    <input id="city" type="text" 
+                    onChange={(e) => setCity(e.target.value)}/>
+                
+                <label htmlFor="state">State</label>
+                <select
+                  name="state"
+                  className="border-2 p-2 rounded-lg"
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Choose State
+                  </option>
+                  {props.states.map((state) => (
+                    <option key={state.abbreviation} value={state.name}>
+                      {state.name}
+                    </option>
+                  ))}
+                </select>
 
-                    <label htmlFor="state">State</label>
-                    <select name="state" id="state"></select>
-
+             
                     <label htmlFor="zip-code">Zip Code</label>
-                    <input id="zip-code" type="number" />
+                    <input id="zip-code" type="number" 
+                        onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "" || /^[0-9\b]+$/.test(value)) {
+                          setZip(value === "" ? null : parseInt(value));
+                        } }}/>
                 </fieldset>
 
                 <label htmlFor="department">Department</label>
-                <select name="department" id="department">
-                    <option>Sales</option>
-                    <option>Marketing</option>
-                    <option>Engineering</option>
-                    <option>Human Resources</option>
-                    <option>Legal</option>
+                <select
+                name="department"
+                id="department"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                required
+                >
+                <option value="" disabled>
+                  Choose Department
+                </option>
+                {props.departments.map((department) => (
+                  <option key={department} value={department}>
+                    {department}
+                  </option>
+                ))}
                 </select>
             </form>
 
-            <button>Save</button>
+            <button onClick={handleSubmit}>Save</button>
         </>
     )
-}
+};
+export default Form;
