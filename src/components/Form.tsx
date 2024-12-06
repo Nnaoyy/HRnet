@@ -2,11 +2,13 @@ import React, { useState, useContext } from "react";
 import EmployeesContext from "../contexts/employee.context";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal from 'react-modal';
 
 interface FormProps {
   states: { name: string; abbreviation: string }[];
   departments: string[];
 }
+
 
 const Form: React.FC<FormProps> = (props) => {
   const employeeContext = useContext(EmployeesContext);
@@ -20,6 +22,7 @@ const Form: React.FC<FormProps> = (props) => {
   const [state, setState] = useState("");
   const [zip, setZip] = useState<number | null>(null);
   const [department, setDepartment] = useState("");
+  const [modalIsOpen, setIsOpen] = React.useState(false);
 
 
 
@@ -37,11 +40,15 @@ const Form: React.FC<FormProps> = (props) => {
         zip: zip !== null ? zip : 0,
       };
       employeeContext.addEmployee(employee);
+      setIsOpen(true);
       console.log(employeeContext);
     } else {
       console.error("EmployeeContext is null");
     }
   };
+  function closeModal() {
+    setIsOpen(false);
+  }
  
     return(
         <>
@@ -138,6 +145,15 @@ const Form: React.FC<FormProps> = (props) => {
             </form>
 
             <button onClick={handleSubmit}>Save</button>
+            <Modal
+              isOpen={modalIsOpen}             
+              onRequestClose={closeModal}
+              contentLabel="Employee Created"
+              className="modal"
+            >
+              <button onClick={closeModal} className="closeButton">X</button>
+              <p className="textModal">Employee Created!</p>
+            </Modal>
         </>
     )
 };

@@ -2,8 +2,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { CreateEmployee } from "./pages/CreateEmployee"
 import { ListEmployee } from "./pages/ListeEmployee"
 import { EmployeesProvider } from "./contexts/employee.context";
+import Modal from 'react-modal';
 
 import './App.css'
+
+Modal.setAppElement('#root');
 
 export default function App() {
 
