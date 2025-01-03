@@ -1,34 +1,47 @@
-type Item = { name: string; abbreviation: string } | string;
+import React, { useState } from 'react';
 
-interface Props {
-    label: string;
-    array: Item[];
-    onChange: (option: { label: string; value?: string }) => void;
-  }
-  
-  const Select: React.FC<Props> = ({ label, array, onChange }) => {
-    
-    const options = array.map((item) => ({
-      label: typeof item === "string" ? item : item.name,
-      value: typeof item === "string" ? item : item.abbreviation,
-    }));
-    
-    return (
-      <div >
-        <label htmlFor={label}>{label}</label>
-        <select  
-            name="state" 
-            id="state"
-            onChange={(selectedOption) =>
-                onChange(selectedOption as { label: string; value?: string })
-              }
-        >
-        {options.map((option) => (
-            <option label={option.label} value={option.value}>{option.label}</option>
-        ))}
-        </select>
-      </div>
-    );
+interface SelectProps {
+  options: (string | { name: string; abbreviation: string })[];
+  onChange: (value: string) => void;
+  placeholder?: string;
+  defaultValue?: string;
+}
+
+const Select: React.FC<SelectProps> = ({ options, onChange, placeholder, defaultValue }) => {
+  const [selectedValue, setSelectedValue] = useState<string>(defaultValue || '');
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    setSelectedValue(value);
+    onChange(value);
   };
-  
-  export default Select;
+
+  const formatOptions = () => {
+    return options.map((option) => {
+      if (typeof option === 'string') {
+        return { value: option, label: option };
+      } else {
+        return { value: option.abbreviation, label: option.name };
+      }
+    });
+  };
+
+  const formattedOptions = formatOptions();
+
+  return (
+    <select value={selectedValue} onChange={handleChange} className="custom-select">
+      {placeholder && (
+        <option value="" disabled>
+          {placeholder}
+        </option>
+      )}
+      {formattedOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+export default Select;
