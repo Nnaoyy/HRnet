@@ -5,16 +5,16 @@ import EmployeesContext from "../contexts/employee.context";
 import SearchBar from "../components/SearchBar";
 
 interface Employee {
-    firstName: string;
-    lastName: string;
-    startDate: string;
-    department: string;
-    birthDate: string;
-    street: string;
-    city: string;
-    state: string;
-    zip: number;
-  }
+  firstName: string;
+  lastName: string;
+  startDate: string;
+  department: string;
+  birthDate: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: number;
+}
 
 const columns = [
   { name: 'First Name', selector: (row: Employee) => row.firstName, sortable: true },
@@ -28,35 +28,36 @@ const columns = [
   { name: 'Zip Code', selector: (row: Employee) => row.zip, sortable: true },
 ];
 
-export function ListEmployee () {
+export function ListEmployee() {
 
-    const { employees } = useContext(EmployeesContext) ?? { employees: [] };
-    const [filteredEmployees, setFilteredEmployees] = useState(employees);
-  
-    const handleSearch = (searchTerm: string) => {
-      if (searchTerm) {
-        const filtered = employees.filter(employee =>
-          employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          employee.lastName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredEmployees(filtered);
-      } else {
-        setFilteredEmployees(employees);
-      }
+  const { employees } = useContext(EmployeesContext) ?? { employees: [] };
+  const [filteredEmployees, setFilteredEmployees] = useState(employees);
+
+  const handleSearch = (searchTerm: string) => {
+    if (searchTerm) {
+      const filtered = employees.filter(employee =>
+        employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredEmployees(filtered);
+    } else {
+      setFilteredEmployees(employees);
     }
+  }
 
-    return(
-        <>
-        <div id="employee-div" >
-            <h1>Current Employees</h1>
-            <SearchBar onSearch={handleSearch} />
-            <DataTable
-                columns={columns}
-                data={filteredEmployees}
-                pagination
-            />
-            <Link to='/'>Home</Link>
-        </div>
-        </>
-    )
+  return (
+    <>
+      <div id="employee-div" >
+        <h1>Current Employees</h1>
+        <SearchBar onSearch={handleSearch} />
+        <DataTable
+          columns={columns}
+          data={filteredEmployees}
+          pagination
+          className="table"
+        />
+        <Link to='/'>Home</Link>
+      </div>
+    </>
+  )
 }

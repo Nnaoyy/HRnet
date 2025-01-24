@@ -16,7 +16,8 @@
     "react-dom": "^18.3.1",
     "react-modal": "^3.16.1",
     "react-router": "^7.0.0",
-    "react-router-dom": "^7.0.0"
+    "react-router-dom": "^7.0.0",
+    "react-select-by-nnaoyy": "^1.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

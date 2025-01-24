@@ -3,7 +3,7 @@ import EmployeesContext from "../contexts/employee.context";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Modal from 'react-modal';
-import Select from "./Select";
+import { Select } from 'react-select-by-nnaoyy';
 
 interface FormProps {
   states: { name: string; abbreviation: string }[];
