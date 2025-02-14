@@ -47,7 +47,7 @@ export function ListEmployee() {
 
   return (
     <>
-      <div id="employee-div" >
+      <div className='container'>
         <h1>Current Employees</h1>
         <SearchBar onSearch={handleSearch} />
         <DataTable
