@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import EmployeesContext from "../contexts/employee.context";
 import SearchBar from "../components/SearchBar";
+//import { employeeData } from "../mock/employeesDatas";
 
 interface Employee {
   firstName: string;
@@ -31,6 +32,7 @@ const columns = [
 export function ListEmployee() {
 
   const { employees } = useContext(EmployeesContext) ?? { employees: [] };
+  // const employees = employeeData;
   const [filteredEmployees, setFilteredEmployees] = useState(employees);
 
   const handleSearch = (searchTerm: string) => {

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 interface Employee {
   firstName: string;
@@ -22,7 +22,14 @@ const EmployeesContext = createContext<EmployeesContextType | null>(null);
 export const EmployeesProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>(() => {
+    const storedEmployees = localStorage.getItem("employees");
+    return storedEmployees ? JSON.parse(storedEmployees) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("employees", JSON.stringify(employees));
+  }, [employees]);
 
   const addEmployee = (employee: Employee) => {
     setEmployees((prevEmployees) => {
